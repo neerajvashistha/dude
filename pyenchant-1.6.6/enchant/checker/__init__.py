@@ -134,8 +134,9 @@ class SpellChecker:
         if lang is None:
             lang = get_default_language()
         if isinstance(lang,basestring):
-            #dict = enchant.Dict(lang)
+            print lang
             dict = enchant.Dict(lang)
+            #dict = enchant.Dict(lang)
         else:
             dict = lang
             try:
