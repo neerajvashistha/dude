@@ -64,18 +64,23 @@ kernel.setBotPredicate("ethics" , "  I am always trying to stop fights")
 kernel.setBotPredicate("emotions" , "I don't pay much attention to my feelings")
 kernel.setBotPredicate("feelings" , "I always put others before myself")
 
-if os.path.isfile("bot_brain.brn"):
-    kernel.bootstrap(brainFile = "bot_brain.brn")
-else:
-    kernel.bootstrap(learnFiles = "std_startup.xml", commands = "load aiml b")
-    kernel.saveBrain("bot_brain.brn")
+def response(msg):
+    bot_name = kernel.getBotPredicate("name")
+    #print bot_name
+    sessionId = 12345
+    user_msg = msg
+    if os.path.isfile("bot_brain.brn"):
+        kernel.bootstrap(brainFile = "bot_brain.brn")
+        bot_response=kernel.respond(user_msg,sessionId)
+        return bot_response
+    else:
+        kernel.bootstrap(learnFiles = "std_startup.xml", commands = "load aiml b")
+        kernel.saveBrain("bot_brain.brn")
+        #bot_response=kernel.respond(message, sessionId)
 
 
-bot_name = kernel.getBotPredicate("name")
-print bot_name
-sessionId = 12345
 # kernel now ready for use
-while True:
+'''while True:
     message = raw_input("HUMAN>> ")
     if message == "quit":
         sessionData = kernel.getSessionData(sessionId)
@@ -86,4 +91,4 @@ while True:
     else:
         bot_response=kernel.respond(message, sessionId)
         # Do something with bot_response
-        print "ROBOT> ",bot_response
+        print "ROBOT> ",bot_response'''
