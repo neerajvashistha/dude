@@ -6,12 +6,14 @@ import sys
 import telepot, time
 from geopy.geocoders import Nominatim
 import otp_sms
+import sillybot
 import re,time
 from goto import with_goto
 import pickle
 import os
 
-is_chatting = False
+is_asking_service = False
+is_chatting=False
 location_area=False
 #number=False
 
@@ -20,21 +22,27 @@ def handle(msg):
     content_type,chat_type,chat_id = telepot.glance(msg)
     #print content_type, chat_type, chat_id
     if content_type is 'text':
+        global is_asking_service
         global is_chatting
         number=""
         global location_area
         chat_id = msg['chat']['id']
         command = msg['text']
         print 'Got command: %s' % command
-        if command == '/hello' and not is_chatting:
+        if command == '/hello' and not is_asking_service:
             bot.sendMessage(chat_id, 'Hello, how are you?')
         elif command == '/chat':
             is_chatting = True
-            bot.sendMessage(chat_id, 'Hello there, how may i help you?')
-        elif command == '/stopchat':
-            is_chatting = False
-            bot.sendMessage(chat_id, 'Bye Bye. take care!')
+            bot.sendMessage(chat_id, 'Hello there, how are you?')
         elif not command.startswith('/') and is_chatting:
+            bot.sendMessage(chat_id, sillybot.response(command))
+        elif command == '/services':
+            is_asking_service = True
+            bot.sendMessage(chat_id, 'Hello there, what service are you looking for?')
+        elif command == '/stopchat':
+            is_asking_service = False
+            bot.sendMessage(chat_id, 'Bye Bye. take care!')
+        elif not command.startswith('/') and is_asking_service:
             phraseExtracted = phe.extract_phrase(command)
             if len(phraseExtracted)!=0:
                 someFunctoStoreValue(phraseExtracted,"phraseExtracted",chat_id)
@@ -64,7 +72,7 @@ def handle(msg):
                     os.remove(str(chat_id)+".txt")
                     goto .exit
                     print "exiting chat error service NA"
-                    
+
                 bot.sendMessage(chat_id,"Provide us your phone no, shortly we will be sending an OTP for verifying your identity")
                 goto .exit
                 label .dispResult
@@ -96,8 +104,8 @@ def handle(msg):
                 otp_sms.get_otp(phn_number,chat_id)
                 bot.sendMessage(chat_id, 'Please type "/otp" and enter the 6-digit OTP you have recieved. For e.g. /otp 123456')
                 label .exit
-                
-        elif command == re.match(r'/otp (\S+)', command).group() and is_chatting:
+
+        elif command == re.match(r'/otp (\S+)', command).group() and is_asking_service:
             print "got it"
             if otp_sms.valid_otp(int(re.match(r'/otp (\S+)', command).group(1)),chat_id) is True:
                 print "hi"
