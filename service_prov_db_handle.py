@@ -4,7 +4,7 @@ import serv_decrp
 import phrase_extract
 from pymongo import MongoClient
 import re
-import numpy as np
+#import numpy as np
 import ast,math
 from collections import defaultdict
 
@@ -124,9 +124,9 @@ def queryServNameLocation(alist, location,index_dict):
 							priceList.append(lowFucn(uniloc_serv_list[i],index))
 
 			#print priceList
-			temp = priceList[0].get("serv_type")	
+			temp = priceList[0].get("serv_type")
 			#print temp
-			lowPri = 9999				
+			lowPri = 9999
 			for i in range(len(priceList)):
 				typz = priceList[i].get("serv_type")
 				#print typz
@@ -144,11 +144,11 @@ def queryServNameLocation(alist, location,index_dict):
 			for i in range(len(blist)):
 				blist[i].pop("serv_type")
 
-			
+
 		if len(uniloc_serv_list) == 0 or len(blist) == 0:
 			someLst = []
 			for i in alist:
-				someLst.append(str(i))# as unique() takes list have strings form dict only 
+				someLst.append(str(i))# as unique() takes list have strings form dict only
 			uniqueList = unique(someLst)
 			#print uniqueList
 			for serv_ty,index in index_dict.items():
@@ -158,9 +158,9 @@ def queryServNameLocation(alist, location,index_dict):
 							priceList.append(lowFucn(uniqueList[i],index))
 
 			#print "hi",priceList
-			temp = priceList[0].get("serv_type")	
+			temp = priceList[0].get("serv_type")
 			#print temp
-			lowPri = 9999				
+			lowPri = 9999
 			for i in range(len(priceList)):
 				typz = priceList[i].get("serv_type")
 				#print typz
@@ -259,7 +259,7 @@ def queryCollection(itemList,query,location):
 
 				elif isinstance(servDecrp, list):
 					serv_prvd_list = servDecrp
-			
+
 		#print serv_prvd_list1
 		#print [index_dict]
 		serv_prvd_list = queryServNameLocation(serv_prvd_list1,location,index_dict)
@@ -279,13 +279,13 @@ def dropCollection(col_name):
 	except Exception as e:
 		print("Error has occurred", e)
 
-client = MongoClient("mongodb://127.0.0.1:27027")
+client = MongoClient("mongodb://192.168.0.3:27027")
 db = client.test
 
 load_JSON_into_Collection("services.json","service_type")
 
 if __name__ == "__main__":
-	client = MongoClient("mongodb://127.0.0.1:27027")
+	client = MongoClient("mongodb://192.168.0.3:27027")
 	db = client.test
 	main()
 	db.close
