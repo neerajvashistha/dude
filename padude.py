@@ -78,7 +78,7 @@ def handle(msg):
                 elif isinstance(db_handle.queryCollection(phraseExtracted,command,loc_area),basestring):
                     bot.sendMessage(chat_id, db_handle.queryCollection(phraseExtracted,command,loc_area))
                     goto .exit
-                    
+
                 bot.sendMessage(chat_id,"Provide us your phone no, shortly we will be sending an OTP for verifying your identity")
                 goto .exit
                 label .dispResult
@@ -110,7 +110,7 @@ def handle(msg):
                 otp_sms.get_otp(phn_number,chat_id)
                 bot.sendMessage(chat_id, 'Please type "/otp" and enter the 6-digit OTP you have recieved. For e.g. /otp 123456')
                 label .exit
-                
+
         elif command.startswith('/otp') and is_chatting:
             print "Recieved OTP"
             if otp_sms.valid_otp(int(re.match(r'/otp (\S+)', command).group(1)),chat_id) is True:
@@ -121,7 +121,7 @@ def handle(msg):
                 print "isNOTValid OTP"
             	bot.sendMessage(chat_id, "Try again, send us your number again.")
         elif command.startswith('/search'):
-            print "searching web" 
+            print "searching web"
             term_to_search = command[8:]
             res = "Exploring web\n"+search.do_a_search(term_to_search)
             bot.sendMessage(chat_id,res)
